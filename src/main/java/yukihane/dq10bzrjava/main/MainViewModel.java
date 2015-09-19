@@ -1,11 +1,11 @@
-package yukihane.dq10bzrjava;
+package yukihane.dq10bzrjava.main;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import de.saxsys.mvvmfx.ViewModel;
 
-public class HelloWorldViewModel implements ViewModel {
+public class MainViewModel implements ViewModel {
 	
 	private StringProperty helloMessage = new SimpleStringProperty("Hello World");
 	
