@@ -5,16 +5,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="yukihane.dq10bzrjava.login.LoginView">
-  <center>
-    <WebView fx:id="webView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-  </center>
-   <top>
-      <HBox prefHeight="40.0" prefWidth="10.0" BorderPane.alignment="CENTER">
-         <children>
-            <TextField fx:id="urlField" />
-            <Button fx:id="openButton" mnemonicParsing="false" text="Button" />
-         </children>
-      </HBox>
-   </top>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="yukihane.dq10bzrjava.login.LoginView">
+   <bottom>
+    <WebView fx:id="webView" minHeight="400.0" minWidth="300.0" prefHeight="-1.0" prefWidth="-1.0" BorderPane.alignment="CENTER" />
+   </bottom>
 </BorderPane>
