@@ -1,13 +1,9 @@
 package yukihane.dq10bzrjava.main;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 import de.saxsys.mvvmfx.ViewModel;
 import de.saxsys.mvvmfx.utils.commands.Action;
 import de.saxsys.mvvmfx.utils.commands.Command;
 import de.saxsys.mvvmfx.utils.commands.DelegateCommand;
-import java.util.function.Supplier;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 
@@ -19,11 +15,10 @@ public class MainViewModel implements ViewModel {
     private final Command loginCommand;
 
     public MainViewModel() {
-        loginCommand = new DelegateCommand(new Supplier<Action>() {
+        loginCommand = new DelegateCommand(() -> new Action() {
             @Override
-            public Action get() {
+            protected void action() throws Exception {
                 openLoginWindow();
-                return null;
             }
         });
     }
