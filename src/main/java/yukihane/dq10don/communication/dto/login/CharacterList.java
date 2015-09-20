@@ -1,15 +1,17 @@
 
 package yukihane.dq10don.communication.dto.login;
 
-import java.util.HashMap;
-import java.util.Map;
-import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Generated;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
@@ -40,7 +42,7 @@ public class CharacterList {
     @JsonProperty("smileUniqueNo")
     private String smileUniqueNo;
     @JsonProperty("webPcNo")
-    private Integer webPcNo;
+    private Long webPcNo;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -190,7 +192,7 @@ public class CharacterList {
      *     The webPcNo
      */
     @JsonProperty("webPcNo")
-    public Integer getWebPcNo() {
+    public Long getWebPcNo() {
         return webPcNo;
     }
 
@@ -200,7 +202,7 @@ public class CharacterList {
      *     The webPcNo
      */
     @JsonProperty("webPcNo")
-    public void setWebPcNo(Integer webPcNo) {
+    public void setWebPcNo(Long webPcNo) {
         this.webPcNo = webPcNo;
     }
 
@@ -214,4 +216,18 @@ public class CharacterList {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "CharacterList{" +
+                "characterName='" + characterName + '\'' +
+                ", iconUrl='" + iconUrl + '\'' +
+                ", job='" + job + '\'' +
+                ", jobId=" + jobId +
+                ", lv=" + lv +
+                ", slotNo=" + slotNo +
+                ", smileUniqueNo='" + smileUniqueNo + '\'' +
+                ", webPcNo=" + webPcNo +
+                ", additionalProperties=" + additionalProperties +
+                '}';
+    }
 }

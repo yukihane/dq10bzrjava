@@ -1,17 +1,19 @@
 
 package yukihane.dq10don.communication.dto.login;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Generated;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
@@ -23,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "sessionId",
     "slotSize"
 })
-public class WebLoginDto {
+public class LoginDto {
 
     @JsonProperty("accountType")
     private Integer accountType;
@@ -170,4 +172,16 @@ public class WebLoginDto {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "LoginDto{" +
+                "accountType=" + accountType +
+                ", characterList=" + characterList +
+                ", cisuserid='" + cisuserid + '\'' +
+                ", resultCode=" + resultCode +
+                ", sessionId='" + sessionId + '\'' +
+                ", slotSize=" + slotSize +
+                ", additionalProperties=" + additionalProperties +
+                '}';
+    }
 }
