@@ -1,11 +1,18 @@
 package yukihane.dq10bzrjava.main;
 
+import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.ViewModel;
+import de.saxsys.mvvmfx.ViewTuple;
 import de.saxsys.mvvmfx.utils.commands.Action;
 import de.saxsys.mvvmfx.utils.commands.Command;
 import de.saxsys.mvvmfx.utils.commands.DelegateCommand;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import yukihane.dq10bzrjava.login.LoginView;
 
 public class MainViewModel implements ViewModel {
 
@@ -44,7 +51,14 @@ public class MainViewModel implements ViewModel {
     }
 
     private void openLoginWindow() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ViewTuple viewTuple = FluentViewLoader.fxmlView(LoginView.class).load();
+
+        Parent root = viewTuple.getView();
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
     }
 
 }
