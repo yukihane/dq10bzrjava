@@ -10,15 +10,15 @@ import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 
 public class MainView implements FxmlView<MainViewModel>, Initializable {
-	
-	@FXML
-	private Label helloLabel;
-	
-	@InjectViewModel
-	private MainViewModel viewModel;
-	
-	@Override
-	public void initialize(URL url, ResourceBundle resourceBundle) {
-		helloLabel.textProperty().bind(viewModel.helloMessage());
-	}
+
+    @FXML
+    private Label helloLabel;
+
+    @InjectViewModel
+    private MainViewModel viewModel;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        helloLabel.textProperty().bind(viewModel.helloMessage());
+    }
 }
