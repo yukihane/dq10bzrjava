@@ -11,14 +11,18 @@ import de.saxsys.mvvmfx.InjectViewModel;
 
 public class MainView implements FxmlView<MainViewModel>, Initializable {
 
-    @FXML
-    private Label helloLabel;
-
     @InjectViewModel
     private MainViewModel viewModel;
 
+    @FXML
+    private Label idLabel;
+
+    @FXML
+    Label characterLabel;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        helloLabel.textProperty().bind(viewModel.helloMessage());
+        idLabel.textProperty().bind(viewModel.idProperty());
+        characterLabel.textProperty().bind(viewModel.characterNameProperty());
     }
 }
