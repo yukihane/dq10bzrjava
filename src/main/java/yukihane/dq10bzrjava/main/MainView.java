@@ -18,11 +18,16 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
     private Label idLabel;
 
     @FXML
-    Label characterLabel;
+    private Label characterLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         idLabel.textProperty().bind(viewModel.idProperty());
         characterLabel.textProperty().bind(viewModel.characterNameProperty());
+    }
+
+    @FXML
+    public void loginAction() {
+        viewModel.getLoginCommand().execute();
     }
 }
