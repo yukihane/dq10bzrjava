@@ -19,11 +19,11 @@ import javax.xml.transform.stream.StreamResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yukihane.dq10bzrjava.Constants;
-import yukihane.dq10don.communication.HappyService;
-import yukihane.dq10don.communication.HappyServiceFactory;
-import yukihane.dq10don.communication.dto.login.CharacterList;
-import yukihane.dq10don.communication.dto.login.LoginDto;
-import yukihane.dq10don.exception.HappyServiceException;
+import yukihane.dq10remote.communication.HappyService;
+import yukihane.dq10remote.communication.HappyServiceFactory;
+import yukihane.dq10remote.communication.dto.login.CharacterList;
+import yukihane.dq10remote.communication.dto.login.LoginDto;
+import yukihane.dq10remote.exception.HappyServiceException;
 
 public class LoginViewModel implements ViewModel {
 

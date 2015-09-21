@@ -18,8 +18,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import yukihane.dq10bzrjava.Constants;
 import yukihane.dq10bzrjava.login.LoginView;
-import yukihane.dq10don.communication.HappyService;
-import yukihane.dq10don.communication.dto.login.CharacterList;
+import yukihane.dq10remote.communication.HappyService;
+import yukihane.dq10remote.communication.dto.login.CharacterList;
 
 public class MainViewModel implements ViewModel {
 
