@@ -1,7 +1,5 @@
 package yukihane.dq10don.exception;
 
-import android.content.Context;
-
 /**
  * アプリケーション内で発生させる/発生する例外の種類を定義するenumです.
  * それぞれに対応するユーザー表示用のメッセージが定義されており,
