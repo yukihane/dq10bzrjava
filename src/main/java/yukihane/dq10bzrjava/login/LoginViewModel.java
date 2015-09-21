@@ -12,13 +12,18 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.concurrent.Worker.State;
 import javafx.scene.web.WebEngine;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import yukihane.dq10bzrjava.Constants;
 import yukihane.dq10don.communication.dto.login.LoginDto;
 
 public class LoginViewModel implements ViewModel {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoginViewModel.class);
 
     private static final String LOGIN_URL = "https://secure.square-enix.com/oauth/oa/oauthlogin?client_id=happy&redirect_uri=https%3A%2F%2Fhappy.dqx.jp%2Fcapi%2Flogin%2Fsecurelogin%2F&response_type=code&yl=1";
 
@@ -54,8 +59,8 @@ public class LoginViewModel implements ViewModel {
                                     new StreamResult(stringWriter));
                             String xml = stringWriter.getBuffer().toString();
                             loginCompleted(xml);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } catch (TransformerException | IOException e) {
+                            LOGGER.error("error occured", e);
                         }
 
                     }
