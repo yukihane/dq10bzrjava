@@ -19,7 +19,11 @@ import javax.xml.transform.stream.StreamResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import yukihane.dq10bzrjava.Constants;
+import yukihane.dq10don.communication.HappyService;
+import yukihane.dq10don.communication.HappyServiceFactory;
+import yukihane.dq10don.communication.dto.login.CharacterList;
 import yukihane.dq10don.communication.dto.login.LoginDto;
+import yukihane.dq10don.exception.HappyServiceException;
 
 public class LoginViewModel implements ViewModel {
 
@@ -81,7 +85,16 @@ public class LoginViewModel implements ViewModel {
             String jsontext = m.group(1);
             ObjectMapper mapper = new ObjectMapper();
             LoginDto res = mapper.readValue(jsontext, LoginDto.class);
-            publish(Constants.LOGIN_COMPLETED, res);
+
+            HappyService service = HappyServiceFactory.getService(res.getSessionId());
+            try {
+                CharacterList character = res.getCharacterList().get(0);
+                service.characterSelect(res.getCharacterList().get(0).getWebPcNo());
+                publish(Constants.LOGIN_COMPLETED, service, character);
+            } catch (HappyServiceException ex) {
+                LOGGER.error("login error", ex);
+            }
+
             finished.set(true);
         }
 

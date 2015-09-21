@@ -20,8 +20,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import yukihane.dq10bzrjava.Constants;
 import yukihane.dq10bzrjava.login.LoginView;
+import yukihane.dq10don.communication.HappyService;
 import yukihane.dq10don.communication.dto.login.CharacterList;
-import yukihane.dq10don.communication.dto.login.LoginDto;
 
 public class MainViewModel implements ViewModel {
 
@@ -29,6 +29,8 @@ public class MainViewModel implements ViewModel {
     private final ReadOnlyListWrapper<CharacterList> characters;
 
     private final Command loginCommand;
+
+    private HappyService service;
 
     public MainViewModel() {
         ObservableList<CharacterList> charalist = FXCollections.observableArrayList();
@@ -72,8 +74,8 @@ public class MainViewModel implements ViewModel {
         stage.show();
 
         NotificationObserver observer = (String string, Object... os) -> {
-            LoginDto res = (LoginDto) os[0];
-            characters.addAll(res.getCharacterList());
+            service = (HappyService) os[0];
+            CharacterList character = (CharacterList) os[1];
         };
 
         MvvmFX.getNotificationCenter().subscribe(
