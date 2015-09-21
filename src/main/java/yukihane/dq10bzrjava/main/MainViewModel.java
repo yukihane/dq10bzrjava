@@ -8,8 +8,6 @@ import de.saxsys.mvvmfx.utils.commands.Action;
 import de.saxsys.mvvmfx.utils.commands.Command;
 import de.saxsys.mvvmfx.utils.commands.DelegateCommand;
 import de.saxsys.mvvmfx.utils.notifications.NotificationObserver;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -25,8 +23,7 @@ import yukihane.dq10don.communication.dto.login.CharacterList;
 
 public class MainViewModel implements ViewModel {
 
-    private final ReadOnlyStringWrapper id = new ReadOnlyStringWrapper("");
-    private final ReadOnlyListWrapper<CharacterList> characters;
+    private final ReadOnlyStringWrapper characterName = new ReadOnlyStringWrapper("");
 
     private final Command loginCommand;
 
@@ -34,7 +31,6 @@ public class MainViewModel implements ViewModel {
 
     public MainViewModel() {
         ObservableList<CharacterList> charalist = FXCollections.observableArrayList();
-        characters = new ReadOnlyListWrapper<>(charalist);
         loginCommand = new DelegateCommand(() -> new Action() {
             @Override
             protected void action() throws Exception {
@@ -43,20 +39,12 @@ public class MainViewModel implements ViewModel {
         });
     }
 
-    public ReadOnlyStringProperty idProperty() {
-        return id.getReadOnlyProperty();
+    public ReadOnlyStringProperty characterNameProperty() {
+        return characterName;
     }
 
-    public String getId() {
-        return id.get();
-    }
-
-    public ReadOnlyListProperty<CharacterList> getCharactersProperty() {
-        return characters;
-    }
-
-    public ObservableList<CharacterList> getCharacters() {
-        return characters.get();
+    public String getCharacterName() {
+        return characterName.get();
     }
 
     public Command getLoginCommand() {
@@ -73,9 +61,16 @@ public class MainViewModel implements ViewModel {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
 
-        NotificationObserver observer = (String string, Object... os) -> {
-            service = (HappyService) os[0];
-            CharacterList character = (CharacterList) os[1];
+        NotificationObserver observer = new NotificationObserver() {
+            @Override
+            public void receivedNotification(String key, Object... payload) {
+                service = (HappyService) payload[0];
+                CharacterList character = (CharacterList) payload[1];
+                characterName.set(character.getCharacterName()
+                        + " (" + character.getSmileUniqueNo() + ")");
+                // FIXME どこかで購読を解除する必要があるがここで行うと java.util.ConcurrentModificationException 発生
+//                MvvmFX.getNotificationCenter().unsubscribe(viewTuple.getViewModel(), this);
+            }
         };
 
         MvvmFX.getNotificationCenter().subscribe(
