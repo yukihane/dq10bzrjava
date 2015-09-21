@@ -72,9 +72,7 @@ public class MainViewModel implements ViewModel {
         stage.show();
 
         NotificationObserver observer = (String string, Object... os) -> {
-            System.out.println("message received");
             LoginDto res = (LoginDto) os[0];
-            System.out.println("res: " + res);
             characters.addAll(res.getCharacterList());
         };
 
