@@ -29,6 +29,9 @@ public class LoginViewModel implements ViewModel {
 
     private WebEngine engine;
 
+    /**
+     * ログイン処理が終了し, 画面を閉じるべきタイミングであればtrue.
+     */
     private ReadOnlyBooleanWrapper finished = new ReadOnlyBooleanWrapper(false);
 
     public ReadOnlyBooleanProperty finishedProperty() {
