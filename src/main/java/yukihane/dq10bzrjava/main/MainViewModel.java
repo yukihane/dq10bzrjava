@@ -28,9 +28,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.schedulers.Schedulers;
 import yukihane.dq10bzrjava.Constants;
+import yukihane.dq10bzrjava.Session;
 import yukihane.dq10bzrjava.entity.LargeCategory;
 import yukihane.dq10bzrjava.login.LoginView;
 import yukihane.dq10remote.communication.HappyService;
+import yukihane.dq10remote.communication.HappyServiceFactory;
 import yukihane.dq10remote.communication.dto.bazaar.LargeCategoryDto;
 import yukihane.dq10remote.communication.dto.bazaar.LargeCategoryValueList;
 import yukihane.dq10remote.communication.dto.login.CharacterList;
@@ -57,6 +59,13 @@ public class MainViewModel implements ViewModel {
                 openLoginWindow();
             }
         });
+
+        Session sess = Session.getInstance();
+        String sessionId = sess.getSessionId();
+        if (sessionId != null && !sessionId.isEmpty()) {
+            service = HappyServiceFactory.getService(sess.getSessionId());
+            characterName.set(sess.getDisplayName());
+        }
     }
 
     public ReadOnlyStringProperty characterNameProperty() {
