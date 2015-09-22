@@ -90,7 +90,7 @@ public class LoginViewModel implements ViewModel {
             try {
                 CharacterList character = res.getCharacterList().get(0);
                 service.characterSelect(res.getCharacterList().get(0).getWebPcNo());
-                publish(Constants.LOGIN_COMPLETED, service, character);
+                publish(Constants.LOGIN_COMPLETED, service, res.getSessionId(), character);
             } catch (HappyServiceException ex) {
                 LOGGER.error("login error", ex);
             }

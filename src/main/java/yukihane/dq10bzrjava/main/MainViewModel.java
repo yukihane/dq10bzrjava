@@ -98,9 +98,15 @@ public class MainViewModel implements ViewModel {
             @Override
             public void receivedNotification(String key, Object... payload) {
                 service = (HappyService) payload[0];
-                CharacterList character = (CharacterList) payload[1];
-                characterName.set(character.getCharacterName()
-                    + " (" + character.getSmileUniqueNo() + ")");
+                String sessionId = (String) payload[1];
+                CharacterList character = (CharacterList) payload[2];
+                String displayName = character.getCharacterName()
+                    + " (" + character.getSmileUniqueNo() + ")";
+                characterName.set(displayName);
+                Session sess = Session.getInstance();
+                sess.setSessionId(sessionId);
+                sess.setDisplayName(displayName);
+                sess.save();
                 // FIXME どこかで購読を解除する必要があるがここで行うと java.util.ConcurrentModificationException 発生
 //                MvvmFX.getNotificationCenter().unsubscribe(viewTuple.getViewModel(), this);
                 loadInitialData();
