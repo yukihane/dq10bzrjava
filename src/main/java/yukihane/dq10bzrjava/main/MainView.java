@@ -9,10 +9,7 @@ import javafx.scene.control.Label;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.cell.ComboBoxListCell;
-import javafx.util.Callback;
+import yukihane.dq10bzrjava.entity.LargeCategory;
 
 public class MainView implements FxmlView<MainViewModel>, Initializable {
 
@@ -23,7 +20,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
     private Label characterLabel;
 
     @FXML
-    private ComboBox<String> cbLargeCategory;
+    private ComboBox<LargeCategory> cbLargeCategory;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

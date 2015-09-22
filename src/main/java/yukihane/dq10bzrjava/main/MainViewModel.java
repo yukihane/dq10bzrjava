@@ -12,6 +12,7 @@ import de.saxsys.mvvmfx.utils.commands.DelegateCommand;
 import de.saxsys.mvvmfx.utils.notifications.NotificationObserver;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
@@ -27,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.schedulers.Schedulers;
 import yukihane.dq10bzrjava.Constants;
+import yukihane.dq10bzrjava.entity.LargeCategory;
 import yukihane.dq10bzrjava.login.LoginView;
 import yukihane.dq10remote.communication.HappyService;
 import yukihane.dq10remote.communication.dto.bazaar.LargeCategoryDto;
@@ -44,7 +46,8 @@ public class MainViewModel implements ViewModel {
 
     private HappyService service;
 
-    private final ReadOnlyListWrapper<String> largeCategories = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+    private final ReadOnlyListWrapper<LargeCategory> largeCategories
+        = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 
     public MainViewModel() {
         ObservableList<CharacterList> charalist = FXCollections.observableArrayList();
@@ -68,7 +71,7 @@ public class MainViewModel implements ViewModel {
         return loginCommand;
     }
 
-    public ReadOnlyListProperty<String> largeCategoriesProperty() {
+    public ReadOnlyListProperty<LargeCategory> largeCategoriesProperty() {
         return largeCategories.getReadOnlyProperty();
     }
 
@@ -102,23 +105,22 @@ public class MainViewModel implements ViewModel {
     }
 
     private void loadInitialData() {
-        Observable<List<String>> observable
-            = Observable.create((Subscriber<? super List<String>> subscriber) -> {
+        Observable<List<LargeCategory>> observable
+            = Observable.create((Subscriber<? super List<LargeCategory>> subscriber) -> {
                 try {
                     LargeCategoryDto lc = service.getLargeCategory();
                     List<LargeCategoryValueList> list = lc.getLargeCategoryValueList();
-                    List<String> names = new ArrayList<>(list.size());
-                    for (LargeCategoryValueList lcvl : list) {
-                        names.add(lcvl.getLargeCategoryName());
-                    }
-                    subscriber.onNext(names);
+                    List<LargeCategory> categories = list.stream()
+                    .map((LargeCategoryValueList t) -> LargeCategory.from(t))
+                    .collect(Collectors.toCollection(() -> new ArrayList<>(list.size())));
+                    subscriber.onNext(categories);
                     subscriber.onCompleted();
                 } catch (HappyServiceException ex) {
                     subscriber.onError(ex);
                 }
             });
         observable.subscribeOn(Schedulers.io());
-        observable.observeOn(Schedulers.newThread()).subscribe((List<String> data) -> {
+        observable.observeOn(Schedulers.newThread()).subscribe((List<LargeCategory> data) -> {
             Platform.runLater(() -> {
                 largeCategories.addAll(data);
             });
