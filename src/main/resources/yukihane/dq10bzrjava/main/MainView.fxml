@@ -65,7 +65,7 @@
                   <Label text="効果の合計値2" GridPane.rowIndex="11" />
                   <Label text="難易度下限" GridPane.rowIndex="12" />
                   <Label text="難易度上限" GridPane.rowIndex="13" />
-                  <ComboBox fx:id="largeCategoryCb" prefWidth="150.0" GridPane.columnIndex="1" />
+                  <ComboBox fx:id="cbLargeCategory" prefWidth="150.0" GridPane.columnIndex="1" />
                </children>
             </GridPane>
             <HBox prefHeight="20.0" prefWidth="40.0">

@@ -8,6 +8,11 @@ import javafx.scene.control.Label;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.cell.ComboBoxListCell;
+import javafx.util.Callback;
 
 public class MainView implements FxmlView<MainViewModel>, Initializable {
 
@@ -17,9 +22,25 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
     @FXML
     private Label characterLabel;
 
+    @FXML
+    private ComboBox<String> cbLargeCategory;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         characterLabel.textProperty().bind(viewModel.characterNameProperty());
+        cbLargeCategory.itemsProperty().bind(viewModel.largeCategoriesProperty());
+//        cbLargeCategory.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+//
+//            @Override
+//            public ListCell<String> call(ListView<String> param) {
+//                return new ListCell<String>() {
+//                    @Override
+//                    protected void updateItem(String item, boolean empty) {
+//                        super.updateItem(item, empty);
+//                    }
+//                };
+//            }
+//        });
     }
 
     @FXML
