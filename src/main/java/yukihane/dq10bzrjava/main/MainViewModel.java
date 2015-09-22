@@ -65,6 +65,7 @@ public class MainViewModel implements ViewModel {
         if (sessionId != null && !sessionId.isEmpty()) {
             service = HappyServiceFactory.getService(sess.getSessionId());
             characterName.set(sess.getDisplayName());
+            loadInitialData();
         }
     }
 
@@ -120,6 +121,7 @@ public class MainViewModel implements ViewModel {
     }
 
     private void loadInitialData() {
+        //「種類」カテゴリのロード
         Observable<List<LargeCategory>> observable
             = Observable.create((Subscriber<? super List<LargeCategory>> subscriber) -> {
                 try {
