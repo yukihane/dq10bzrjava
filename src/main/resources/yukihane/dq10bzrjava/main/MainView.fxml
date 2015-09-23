@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="599.0" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="yukihane.dq10bzrjava.main.MainView">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="502.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/8.0.45" xmlns:fx="http://javafx.com/fxml/1" fx:controller="yukihane.dq10bzrjava.main.MainView">
    <top>
       <HBox prefHeight="10.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -69,6 +69,16 @@
                   <ComboBox fx:id="cbSmallCategory" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <ComboBox fx:id="cbItemCount" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <ComboBox fx:id="cbQuality" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <ComboBox fx:id="cbJob" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <ComboBox fx:id="cbEqLvMin" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <ComboBox fx:id="cbEqLvMax" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <ComboBox fx:id="cbNumOfRenkin" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <ComboBox fx:id="cbRenkinEffect1" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <TextField fx:id="cbRenkinMinValue1" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                  <ComboBox fx:id="cbRenkinEffect2" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                  <TextField fx:id="cbRenkinMinValue2" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                  <ComboBox fx:id="cbDifficultyMin" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                  <ComboBox fx:id="cbDifficultyMax" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
                </children>
             </GridPane>
             <HBox prefHeight="20.0" prefWidth="40.0">
@@ -80,4 +90,22 @@
          </children>
       </VBox>
    </left>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea prefHeight="100.0" prefWidth="200.0" />
+            <HBox prefHeight="20.0" prefWidth="200.0">
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <Button mnemonicParsing="false" text="Button">
+                     <HBox.margin>
+                        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <ScrollPane prefHeight="400.0" prefWidth="200.0" />
+         </children>
+      </VBox>
+   </center>
 </BorderPane>
