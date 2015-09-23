@@ -51,13 +51,10 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 //            }
 //        });
         cbSmallCategory.itemsProperty().bind(viewModel.smallCategoriesProperty());
-        cbSmallCategory.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SmallCategory>() {
-
-            @Override
-            public void changed(ObservableValue<? extends SmallCategory> observable, SmallCategory oldValue, SmallCategory newValue) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        });
+        cbSmallCategory.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue)
+            -> viewModel.selectedSmallCategoryProperty().set(newValue)
+        );
     }
 
     @FXML

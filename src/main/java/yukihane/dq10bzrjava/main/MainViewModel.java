@@ -39,6 +39,8 @@ import yukihane.dq10remote.communication.HappyService;
 import yukihane.dq10remote.communication.HappyServiceFactory;
 import yukihane.dq10remote.communication.dto.bazaar.LargeCategoryDto;
 import yukihane.dq10remote.communication.dto.bazaar.LargeCategoryValueList;
+import yukihane.dq10remote.communication.dto.bazaar.SmallCategoryDto;
+import yukihane.dq10remote.communication.dto.bazaar.SmallCategoryValueList;
 import yukihane.dq10remote.communication.dto.login.CharacterList;
 import yukihane.dq10remote.exception.HappyServiceException;
 
@@ -74,6 +76,7 @@ public class MainViewModel implements ViewModel {
         });
 
         selectedLargeCategory.addListener(new SelectedLargeCategoryChangeListener());
+        selectedSmallCategory.addListener(new SelectedSmallCategoryChangeListener());
 
         Session sess = Session.getInstance();
         String sessionId = sess.getSessionId();
@@ -180,7 +183,38 @@ public class MainViewModel implements ViewModel {
     }
 
     private void querySmallCategory() {
-        System.out.println("querySmallCategory called");
+        LargeCategory lc = selectedLargeCategory.get();
+        if (lc == null) {
+            LOGGER.debug("large category is null");
+            return;
+        }
+
+        Observable<List<SmallCategory>> observable
+            = Observable.create((Subscriber<? super List<SmallCategory>> subscriber) -> {
+                try {
+                    SmallCategoryDto dto = service.getSmallCategory(lc.getLargeCategoryId());
+                    List<SmallCategoryValueList> list = dto.getSmallCategoryValueList();
+                    List<SmallCategory> categories = list.stream()
+                    .map((SmallCategoryValueList t) -> SmallCategory.from(t))
+                    .collect(Collectors.toCollection(() -> new ArrayList<>(list.size())));
+                    subscriber.onNext(categories);
+                    subscriber.onCompleted();
+                } catch (HappyServiceException ex) {
+                    subscriber.onError(ex);
+                }
+            });
+        observable.subscribeOn(Schedulers.io());
+        observable.observeOn(Schedulers.newThread()).subscribe((List<SmallCategory> data) -> {
+            Platform.runLater(() -> {
+                smallCategories.addAll(data);
+            });
+        }, (Throwable t) -> {
+            LOGGER.error("large category get error", t);
+        });
+    }
+
+    private void queryItemCount() {
+        System.out.println("queryItemCount called");
     }
 
     private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
@@ -191,10 +225,22 @@ public class MainViewModel implements ViewModel {
                 return;
             }
             if (!newValue.isSmallCategory()) {
-                // smallCategory set
+                smallCategories.clear();
+                queryItemCount();
                 return;
             }
             querySmallCategory();
+        }
+    }
+
+    private class SelectedSmallCategoryChangeListener implements ChangeListener<SmallCategory> {
+
+        @Override
+        public void changed(ObservableValue<? extends SmallCategory> observable, SmallCategory oldValue, SmallCategory newValue) {
+            if (oldValue == newValue) {
+                return;
+            }
+            queryItemCount();
         }
     }
 }
