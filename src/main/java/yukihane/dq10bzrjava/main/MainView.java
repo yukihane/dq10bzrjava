@@ -10,6 +10,7 @@ import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.scene.control.ComboBox;
 import yukihane.dq10bzrjava.entity.LargeCategory;
+import yukihane.dq10bzrjava.entity.SmallCategory;
 
 public class MainView implements FxmlView<MainViewModel>, Initializable {
 
@@ -21,6 +22,9 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
     @FXML
     private ComboBox<LargeCategory> cbLargeCategory;
+
+    @FXML
+    private ComboBox<SmallCategory> cbSmallCategory;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -38,6 +42,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 //                };
 //            }
 //        });
+        cbSmallCategory.itemsProperty().bind(viewModel.smallCategoriesProperty());
     }
 
     @FXML

@@ -30,6 +30,7 @@ import rx.schedulers.Schedulers;
 import yukihane.dq10bzrjava.Constants;
 import yukihane.dq10bzrjava.Session;
 import yukihane.dq10bzrjava.entity.LargeCategory;
+import yukihane.dq10bzrjava.entity.SmallCategory;
 import yukihane.dq10bzrjava.login.LoginView;
 import yukihane.dq10remote.communication.HappyService;
 import yukihane.dq10remote.communication.HappyServiceFactory;
@@ -49,6 +50,9 @@ public class MainViewModel implements ViewModel {
     private HappyService service;
 
     private final ReadOnlyListWrapper<LargeCategory> largeCategories
+        = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+
+    private final ReadOnlyListWrapper<SmallCategory> smallCategories
         = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 
     public MainViewModel() {
@@ -83,6 +87,10 @@ public class MainViewModel implements ViewModel {
 
     public ReadOnlyListProperty<LargeCategory> largeCategoriesProperty() {
         return largeCategories.getReadOnlyProperty();
+    }
+
+    public ReadOnlyListProperty<SmallCategory> smallCategoriesProperty() {
+        return smallCategories.getReadOnlyProperty();
     }
 
     private void openLoginWindow() {
