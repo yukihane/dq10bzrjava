@@ -129,7 +129,13 @@ public class MainViewModel implements ViewModel {
     }
 
     private void loadInitialData() {
-        //「種類」カテゴリのロード
+        queryLargeCategory();
+    }
+
+    /**
+     * 「種類」カテゴリのロード.
+     */
+    private void queryLargeCategory() {
         Observable<List<LargeCategory>> observable
             = Observable.create((Subscriber<? super List<LargeCategory>> subscriber) -> {
                 try {
