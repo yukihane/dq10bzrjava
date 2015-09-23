@@ -11,6 +11,7 @@ import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.scene.control.ComboBox;
 import yukihane.dq10bzrjava.entity.ItemCount;
 import yukihane.dq10bzrjava.entity.LargeCategory;
+import yukihane.dq10bzrjava.entity.Quality;
 import yukihane.dq10bzrjava.entity.SmallCategory;
 
 public class MainView implements FxmlView<MainViewModel>, Initializable {
@@ -29,6 +30,9 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
     @FXML
     private ComboBox<ItemCount> cbItemCount;
+
+    @FXML
+    private ComboBox<Quality> cbQuality;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -57,6 +61,9 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
         );
 
         cbItemCount.itemsProperty().bind(viewModel.itemCountsProperty());
+
+        cbQuality.itemsProperty().bind(viewModel.qualitiesProperty());
+        cbQuality.disableProperty().bind(viewModel.disabledQualitiesProperty());
     }
 
     @FXML

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -34,6 +36,7 @@ import yukihane.dq10bzrjava.Constants;
 import yukihane.dq10bzrjava.Session;
 import yukihane.dq10bzrjava.entity.ItemCount;
 import yukihane.dq10bzrjava.entity.LargeCategory;
+import yukihane.dq10bzrjava.entity.Quality;
 import yukihane.dq10bzrjava.entity.SmallCategory;
 import yukihane.dq10bzrjava.login.LoginView;
 import yukihane.dq10remote.communication.HappyService;
@@ -71,6 +74,12 @@ public class MainViewModel implements ViewModel {
 
     private final ReadOnlyListWrapper<ItemCount> itemCounts
         = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+
+    private final ReadOnlyListWrapper<Quality> qualities
+        = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+
+    private final ReadOnlyBooleanWrapper disabledQualities
+        = new ReadOnlyBooleanWrapper(true);
 
     public MainViewModel() {
         ObservableList<CharacterList> charalist = FXCollections.observableArrayList();
@@ -123,6 +132,14 @@ public class MainViewModel implements ViewModel {
 
     public ReadOnlyListProperty<ItemCount> itemCountsProperty() {
         return itemCounts.getReadOnlyProperty();
+    }
+
+    public ReadOnlyListProperty<Quality> qualitiesProperty() {
+        return qualities.getReadOnlyProperty();
+    }
+
+    public ReadOnlyBooleanProperty disabledQualitiesProperty() {
+        return disabledQualities.getReadOnlyProperty();
     }
 
     private void openLoginWindow() {
@@ -262,6 +279,29 @@ public class MainViewModel implements ViewModel {
         });
     }
 
+    private void unsetDisabled() {
+        clearOptions();
+
+        LargeCategory lc = selectedLargeCategory.get();
+        SmallCategory sc = selectedSmallCategory.get();
+        if (lc == null || (!lc.isSmallCategory() && sc == null)) {
+            // TODO: disableにする必要あり?
+            return;
+        }
+        int lcid = lc.getLargeCategoryId();
+        int scid = lc.isSmallCategory() ? sc.getSmallCategoryId() : lc.getSmallCategoryId();
+
+        if (lcid == 1 || lcid == 2 || lcid == 3) {
+            disabledQualities.set(false);
+            qualities.addAll(Quality.values());
+        }
+
+    }
+
+    private void clearOptions() {
+        qualities.clear();
+    }
+
     private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
 
         @Override
@@ -287,6 +327,7 @@ public class MainViewModel implements ViewModel {
                 return;
             }
             itemCounts.clear();
+            unsetDisabled();
             queryItemCount();
         }
     }
