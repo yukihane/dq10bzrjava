@@ -15,18 +15,18 @@ import yukihane.dq10remote.communication.dto.bazaar.SmallCategoryValueList;
 public class SmallCategory {
 
     @Getter
-    private final int smallCategoryId;
-
-    @Getter
     private final String smallCategoryName;
 
-    public SmallCategory(int smallCategoryId, String smallCategoryName) {
-        this.smallCategoryId = smallCategoryId;
+    @Getter
+    private final int smallCategoryId;
+
+    public SmallCategory(String smallCategoryName, int smallCategoryId) {
         this.smallCategoryName = smallCategoryName;
+        this.smallCategoryId = smallCategoryId;
     }
 
     public static SmallCategory from(SmallCategoryValueList t) {
-        return new SmallCategory(t.getSmallCategoryId(), t.getSmallCategoryName());
+        return new SmallCategory(t.getSmallCategoryName(), t.getSmallCategoryId());
     }
 
 }
