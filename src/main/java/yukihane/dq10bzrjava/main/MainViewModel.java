@@ -18,6 +18,9 @@ import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
@@ -52,8 +55,14 @@ public class MainViewModel implements ViewModel {
     private final ReadOnlyListWrapper<LargeCategory> largeCategories
         = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 
+    private final SimpleObjectProperty<LargeCategory> selectedLargeCategory
+        = new SimpleObjectProperty<>();
+
     private final ReadOnlyListWrapper<SmallCategory> smallCategories
         = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+
+    private final SimpleObjectProperty<SmallCategory> selectedSmallCategory
+        = new SimpleObjectProperty<>();
 
     public MainViewModel() {
         ObservableList<CharacterList> charalist = FXCollections.observableArrayList();
@@ -63,6 +72,8 @@ public class MainViewModel implements ViewModel {
                 openLoginWindow();
             }
         });
+
+        selectedLargeCategory.addListener(new SelectedLargeCategoryChangeListener());
 
         Session sess = Session.getInstance();
         String sessionId = sess.getSessionId();
@@ -89,8 +100,16 @@ public class MainViewModel implements ViewModel {
         return largeCategories.getReadOnlyProperty();
     }
 
+    public SimpleObjectProperty<LargeCategory> selectedLargeCategoryProperty() {
+        return selectedLargeCategory;
+    }
+
     public ReadOnlyListProperty<SmallCategory> smallCategoriesProperty() {
         return smallCategories.getReadOnlyProperty();
+    }
+
+    public SimpleObjectProperty<SmallCategory> selectedSmallCategoryProperty() {
+        return selectedSmallCategory;
     }
 
     private void openLoginWindow() {
@@ -158,5 +177,24 @@ public class MainViewModel implements ViewModel {
         }, (Throwable t) -> {
             LOGGER.error("large category get error", t);
         });
+    }
+
+    private void querySmallCategory() {
+        System.out.println("querySmallCategory called");
+    }
+
+    private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
+
+        @Override
+        public void changed(ObservableValue<? extends LargeCategory> observable, LargeCategory oldValue, LargeCategory newValue) {
+            if (oldValue == newValue) {
+                return;
+            }
+            if (!newValue.isSmallCategory()) {
+                // smallCategory set
+                return;
+            }
+            querySmallCategory();
+        }
     }
 }

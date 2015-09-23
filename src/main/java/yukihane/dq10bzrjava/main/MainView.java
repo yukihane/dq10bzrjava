@@ -1,5 +1,6 @@
 package yukihane.dq10bzrjava.main;
 
+import com.sun.javafx.beans.event.AbstractNotifyListener;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -8,6 +9,9 @@ import javafx.scene.control.Label;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ComboBox;
 import yukihane.dq10bzrjava.entity.LargeCategory;
 import yukihane.dq10bzrjava.entity.SmallCategory;
@@ -30,6 +34,10 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         characterLabel.textProperty().bind(viewModel.characterNameProperty());
         cbLargeCategory.itemsProperty().bind(viewModel.largeCategoriesProperty());
+        cbLargeCategory.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue)
+            -> viewModel.selectedLargeCategoryProperty().set(newValue)
+        );
 //        cbLargeCategory.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 //
 //            @Override
@@ -43,6 +51,13 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 //            }
 //        });
         cbSmallCategory.itemsProperty().bind(viewModel.smallCategoriesProperty());
+        cbSmallCategory.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SmallCategory>() {
+
+            @Override
+            public void changed(ObservableValue<? extends SmallCategory> observable, SmallCategory oldValue, SmallCategory newValue) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
     }
 
     @FXML
