@@ -18,6 +18,9 @@ public class LargeCategory {
     @Getter
     private final int largeCategoryId;
 
+    /**
+     * (おそらく)smallCategoryを持っているかどうか
+     */
     @Getter
     private final boolean isSmallCategory;
 
