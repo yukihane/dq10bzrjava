@@ -1,6 +1,5 @@
 package yukihane.dq10bzrjava.main;
 
-import com.sun.javafx.beans.event.AbstractNotifyListener;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -9,10 +8,8 @@ import javafx.scene.control.Label;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.ComboBox;
+import yukihane.dq10bzrjava.entity.ItemCount;
 import yukihane.dq10bzrjava.entity.LargeCategory;
 import yukihane.dq10bzrjava.entity.SmallCategory;
 
@@ -29,6 +26,9 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
     @FXML
     private ComboBox<SmallCategory> cbSmallCategory;
+
+    @FXML
+    private ComboBox<ItemCount> cbItemCount;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -55,6 +55,8 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             (observable, oldValue, newValue)
             -> viewModel.selectedSmallCategoryProperty().set(newValue)
         );
+
+        cbItemCount.itemsProperty().bind(viewModel.itemCountsProperty());
     }
 
     @FXML

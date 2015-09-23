@@ -32,11 +32,14 @@ import org.slf4j.LoggerFactory;
 import rx.schedulers.Schedulers;
 import yukihane.dq10bzrjava.Constants;
 import yukihane.dq10bzrjava.Session;
+import yukihane.dq10bzrjava.entity.ItemCount;
 import yukihane.dq10bzrjava.entity.LargeCategory;
 import yukihane.dq10bzrjava.entity.SmallCategory;
 import yukihane.dq10bzrjava.login.LoginView;
 import yukihane.dq10remote.communication.HappyService;
 import yukihane.dq10remote.communication.HappyServiceFactory;
+import yukihane.dq10remote.communication.dto.bazaar.ItemCountDto;
+import yukihane.dq10remote.communication.dto.bazaar.ItemCountValueList;
 import yukihane.dq10remote.communication.dto.bazaar.LargeCategoryDto;
 import yukihane.dq10remote.communication.dto.bazaar.LargeCategoryValueList;
 import yukihane.dq10remote.communication.dto.bazaar.SmallCategoryDto;
@@ -65,6 +68,9 @@ public class MainViewModel implements ViewModel {
 
     private final SimpleObjectProperty<SmallCategory> selectedSmallCategory
         = new SimpleObjectProperty<>();
+
+    private final ReadOnlyListWrapper<ItemCount> itemCounts
+        = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 
     public MainViewModel() {
         ObservableList<CharacterList> charalist = FXCollections.observableArrayList();
@@ -113,6 +119,10 @@ public class MainViewModel implements ViewModel {
 
     public SimpleObjectProperty<SmallCategory> selectedSmallCategoryProperty() {
         return selectedSmallCategory;
+    }
+
+    public ReadOnlyListProperty<ItemCount> itemCountsProperty() {
+        return itemCounts.getReadOnlyProperty();
     }
 
     private void openLoginWindow() {
@@ -214,7 +224,42 @@ public class MainViewModel implements ViewModel {
     }
 
     private void queryItemCount() {
-        System.out.println("queryItemCount called");
+        LargeCategory lc = selectedLargeCategory.get();
+        if (lc == null) {
+            LOGGER.debug("large category is null");
+            return;
+        }
+        SmallCategory sc = selectedSmallCategory.get();
+        if (lc.isSmallCategory() && sc == null) {
+            LOGGER.debug("small category is null");
+            return;
+        }
+
+        int lcid = lc.getLargeCategoryId();
+        int scid = (lc.isSmallCategory()) ? sc.getSmallCategoryId() : lc.getSmallCategoryId();
+
+        Observable<List<ItemCount>> observable
+            = Observable.create((Subscriber<? super List<ItemCount>> subscriber) -> {
+                try {
+                    ItemCountDto dto = service.getItemCount(lcid, scid);
+                    List<ItemCountValueList> list = dto.getItemCountValueList();
+                    List<ItemCount> categories = list.stream()
+                    .map((ItemCountValueList t) -> ItemCount.from(t))
+                    .collect(Collectors.toCollection(() -> new ArrayList<>(list.size())));
+                    subscriber.onNext(categories);
+                    subscriber.onCompleted();
+                } catch (HappyServiceException ex) {
+                    subscriber.onError(ex);
+                }
+            });
+        observable.subscribeOn(Schedulers.io());
+        observable.observeOn(Schedulers.newThread()).subscribe((List<ItemCount> data) -> {
+            Platform.runLater(() -> {
+                itemCounts.addAll(data);
+            });
+        }, (Throwable t) -> {
+            LOGGER.error("large category get error", t);
+        });
     }
 
     private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
@@ -224,8 +269,9 @@ public class MainViewModel implements ViewModel {
             if (oldValue == newValue) {
                 return;
             }
+            smallCategories.clear();
+            itemCounts.clear();
             if (!newValue.isSmallCategory()) {
-                smallCategories.clear();
                 queryItemCount();
                 return;
             }
@@ -240,6 +286,7 @@ public class MainViewModel implements ViewModel {
             if (oldValue == newValue) {
                 return;
             }
+            itemCounts.clear();
             queryItemCount();
         }
     }

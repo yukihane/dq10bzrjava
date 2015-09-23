@@ -67,6 +67,7 @@
                   <Label text="難易度上限" GridPane.rowIndex="13" />
                   <ComboBox fx:id="cbLargeCategory" prefWidth="150.0" GridPane.columnIndex="1" />
                   <ComboBox fx:id="cbSmallCategory" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="cbItemCount" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
             <HBox prefHeight="20.0" prefWidth="40.0">
