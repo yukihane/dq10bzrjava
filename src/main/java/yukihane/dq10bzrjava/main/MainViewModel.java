@@ -60,24 +60,63 @@ public class MainViewModel implements ViewModel {
 
     private HappyService service;
 
+    /**
+     * 種類の選択肢.
+     */
     private final ReadOnlyListWrapper<LargeCategory> largeCategories
         = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 
+    /**
+     * 選択された種類.
+     */
     private final SimpleObjectProperty<LargeCategory> selectedLargeCategory
         = new SimpleObjectProperty<>();
 
+    /**
+     * 種類2の選択肢.
+     */
     private final ReadOnlyListWrapper<SmallCategory> smallCategories
         = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 
+    /**
+     * 選択された種類2.
+     */
     private final SimpleObjectProperty<SmallCategory> selectedSmallCategory
         = new SimpleObjectProperty<>();
 
+    /**
+     * アイテム名の選択肢.
+     */
     private final ReadOnlyListWrapper<ItemCount> itemCounts
         = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 
+    /**
+     * 選択されたアイテム名.
+     */
+    private final SimpleObjectProperty<ItemCount> selectedItemCount
+        = new SimpleObjectProperty<>();
+
+    /**
+     * アイテム名が選択不可能か.
+     */
+    private final ReadOnlyBooleanWrapper disabledItemCounts
+        = new ReadOnlyBooleanWrapper(true);
+
+    /**
+     * できのよさの選択肢.
+     */
     private final ReadOnlyListWrapper<Quality> qualities
         = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 
+    /**
+     * 選択されたできのよさ.
+     */
+    private final SimpleObjectProperty<Quality> selectedQuality
+        = new SimpleObjectProperty<>();
+
+    /**
+     * できのよさが選択不可能か.
+     */
     private final ReadOnlyBooleanWrapper disabledQualities
         = new ReadOnlyBooleanWrapper(true);
 
@@ -92,6 +131,7 @@ public class MainViewModel implements ViewModel {
 
         selectedLargeCategory.addListener(new SelectedLargeCategoryChangeListener());
         selectedSmallCategory.addListener(new SelectedSmallCategoryChangeListener());
+        selectedItemCount.addListener(new SelectedItemCountChangeListener());
 
         Session sess = Session.getInstance();
         String sessionId = sess.getSessionId();
@@ -134,8 +174,20 @@ public class MainViewModel implements ViewModel {
         return itemCounts.getReadOnlyProperty();
     }
 
+    public SimpleObjectProperty<ItemCount> selectedItemCountProperty() {
+        return selectedItemCount;
+    }
+
+    public ReadOnlyBooleanProperty disabledItemCountsProperty() {
+        return disabledItemCounts.getReadOnlyProperty();
+    }
+
     public ReadOnlyListProperty<Quality> qualitiesProperty() {
         return qualities.getReadOnlyProperty();
+    }
+
+    public SimpleObjectProperty<Quality> selectedQualityProperty() {
+        return selectedQuality;
     }
 
     public ReadOnlyBooleanProperty disabledQualitiesProperty() {
@@ -281,25 +333,42 @@ public class MainViewModel implements ViewModel {
 
     private void unsetDisabled() {
         clearOptions();
+        setDisabledDefault();
 
         LargeCategory lc = selectedLargeCategory.get();
         SmallCategory sc = selectedSmallCategory.get();
-        if (lc == null || (!lc.isSmallCategory() && sc == null)) {
-            // TODO: disableにする必要あり?
+        if (lc == null || (lc.isSmallCategory() && sc == null)) {
             return;
         }
         int lcid = lc.getLargeCategoryId();
         int scid = lc.isSmallCategory() ? sc.getSmallCategoryId() : lc.getSmallCategoryId();
 
         if (lcid == 1 || lcid == 2 || lcid == 3) {
+            // 武器, 盾, 防具の場合
+            disabledItemCounts.set(false);
             disabledQualities.set(false);
             qualities.addAll(Quality.values());
-        }
+        } else if (lcid == 5 || lcid == 11 || scid == 606) {
+            // 職人どうぐ, 釣りどうぐ, 消費アイテム>料理 の場合
+            disabledItemCounts.set(false);
+            disabledQualities.set(false);
+            qualities.addAll(Quality.values());
+        } else if (scid == 605) {
+            // 消費アイテム>依頼書 の場合
 
+        } else if (lcid == 6 || lcid == 7 || lcid == 8 || lcid == 12 || lcid == 9 || lcid == 10) {
+            // (料理と依頼書以外の)消費アイテム, 素材, 家具, 庭具, レシピ帳, スカウトの書
+
+        }
     }
 
     private void clearOptions() {
         qualities.clear();
+    }
+
+    private void setDisabledDefault() {
+        disabledItemCounts.set(true);
+        disabledQualities.set(true);
     }
 
     private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
@@ -326,9 +395,17 @@ public class MainViewModel implements ViewModel {
             if (oldValue == newValue) {
                 return;
             }
-            itemCounts.clear();
             unsetDisabled();
+            itemCounts.clear();
             queryItemCount();
+        }
+    }
+
+    private class SelectedItemCountChangeListener implements ChangeListener<ItemCount> {
+
+        @Override
+        public void changed(ObservableValue<? extends ItemCount> observable, ItemCount oldValue, ItemCount newValue) {
+            System.out.println("item count changed");
         }
     }
 }

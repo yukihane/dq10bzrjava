@@ -37,6 +37,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         characterLabel.textProperty().bind(viewModel.characterNameProperty());
+
         cbLargeCategory.itemsProperty().bind(viewModel.largeCategoriesProperty());
         cbLargeCategory.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue)
@@ -54,6 +55,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 //                };
 //            }
 //        });
+
         cbSmallCategory.itemsProperty().bind(viewModel.smallCategoriesProperty());
         cbSmallCategory.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue)
@@ -61,8 +63,11 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
         );
 
         cbItemCount.itemsProperty().bind(viewModel.itemCountsProperty());
+        viewModel.selectedItemCountProperty().bind(cbItemCount.getSelectionModel().selectedItemProperty());
+        cbItemCount.disableProperty().bind(viewModel.disabledItemCountsProperty());
 
         cbQuality.itemsProperty().bind(viewModel.qualitiesProperty());
+        viewModel.selectedQualityProperty().bind(cbQuality.getSelectionModel().selectedItemProperty());
         cbQuality.disableProperty().bind(viewModel.disabledQualitiesProperty());
     }
 
