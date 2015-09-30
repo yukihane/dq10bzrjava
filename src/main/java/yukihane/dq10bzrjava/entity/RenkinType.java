@@ -5,17 +5,29 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
- * 装備可能職業
+ * 錬金効果.
  *
  * @author yuki
  */
 @ToString
 @EqualsAndHashCode
-public class Job {
+public class RenkinType {
 
     @Getter
-    private String id;
+    private int id;
+
+    @Getter
+    private double max;
+
+    @Getter
+    private double min;
 
     @Getter
     private String name;
+
+    @Getter
+    private int scale;
+
+    @Getter
+    private double step;
 }

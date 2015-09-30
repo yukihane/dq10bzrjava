@@ -5,16 +5,20 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
- * 難易度.
+ * 錬金効果数
+ *
  * @author yuki
  */
 @ToString
 @EqualsAndHashCode
-public class Difficulty {
+public class NumOfRenkin {
 
     @Getter
     private String text;
 
     @Getter
-    private int parameter;
+    private int min;
+
+    @Getter
+    private int max;
 }

@@ -6,11 +6,11 @@ import lombok.ToString;
 import yukihane.dq10remote.communication.dto.bazaar.ItemCountValueList;
 
 /**
- *
+ * アイテムの実体.
  * @author yuki
  */
-@EqualsAndHashCode
 @ToString
+@EqualsAndHashCode
 public class ItemCount {
 
     @Getter
