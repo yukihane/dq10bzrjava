@@ -400,12 +400,12 @@ public class MainViewModel implements ViewModel {
             // 武器, 盾, 防具の場合
             disabledItemCounts.set(false);
             disabledQualities.set(false);
-            qualities.addAll(Quality.values());
+//            qualities.addAll(Quality.values());
         } else if (lcid == 5 || lcid == 11 || scid == 606) {
             // 職人どうぐ, 釣りどうぐ, 消費アイテム>料理 の場合
             disabledItemCounts.set(false);
             disabledQualities.set(false);
-            qualities.addAll(Quality.values());
+//            qualities.addAll(Quality.values());
         } else if (scid == 605) {
             // 消費アイテム>依頼書 の場合
 
