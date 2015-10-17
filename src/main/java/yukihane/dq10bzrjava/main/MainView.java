@@ -57,10 +57,10 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 //            }
 //        });
 
-        cbSmallCategory.itemsProperty().bind(viewModel.smallCategoriesProperty());
+        cbSmallCategory.itemsProperty().bind(viewModel.getSmallCategory().valuesProperty());
         cbSmallCategory.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue)
-            -> viewModel.selectedSmallCategoryProperty().set(newValue)
+            -> viewModel.getSmallCategory().selectedProperty().set(newValue)
         );
 
         cbItemCount.itemsProperty().bind(viewModel.itemCountsProperty());

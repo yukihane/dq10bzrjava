@@ -73,6 +73,9 @@ public class MainViewModel implements ViewModel {
     @Getter
     private final LargeCategoryProperties largeCategory = new LargeCategoryProperties();
 
+    @Getter
+    private final SmallCategoryProperties smallCategory = new SmallCategoryProperties();
+
     private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
 
         @Override
@@ -80,7 +83,7 @@ public class MainViewModel implements ViewModel {
             if (oldValue == newValue) {
                 return;
             }
-            smallCategories.clear();
+            smallCategory.values.clear();
             itemCounts.clear();
             if (!newValue.isSmallCategory()) {
                 queryItemCount();
@@ -88,26 +91,6 @@ public class MainViewModel implements ViewModel {
             }
             querySmallCategory();
         }
-    }
-
-    /**
-     * 種類2の選択肢.
-     */
-    private final ReadOnlyListWrapper<SmallCategory> smallCategories
-        = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
-
-    public ReadOnlyListProperty<SmallCategory> smallCategoriesProperty() {
-        return smallCategories.getReadOnlyProperty();
-    }
-
-    /**
-     * 選択された種類2.
-     */
-    private final SimpleObjectProperty<SmallCategory> selectedSmallCategory
-        = new SimpleObjectProperty<>();
-
-    public SimpleObjectProperty<SmallCategory> selectedSmallCategoryProperty() {
-        return selectedSmallCategory;
     }
 
     private class SelectedSmallCategoryChangeListener implements ChangeListener<SmallCategory> {
@@ -210,7 +193,7 @@ public class MainViewModel implements ViewModel {
         });
 
         largeCategory.selected.addListener(new SelectedLargeCategoryChangeListener());
-        selectedSmallCategory.addListener(new SelectedSmallCategoryChangeListener());
+        smallCategory.selected.addListener(new SelectedSmallCategoryChangeListener());
         selectedItemCount.addListener(new SelectedItemCountChangeListener());
 
         Session sess = Session.getInstance();
@@ -313,7 +296,7 @@ public class MainViewModel implements ViewModel {
         observable.subscribeOn(Schedulers.io());
         observable.observeOn(Schedulers.newThread()).subscribe((List<SmallCategory> data) -> {
             Platform.runLater(() -> {
-                smallCategories.addAll(data);
+                smallCategory.values.addAll(data);
             });
         }, (Throwable t) -> {
             LOGGER.error("large category get error", t);
@@ -326,7 +309,7 @@ public class MainViewModel implements ViewModel {
             LOGGER.debug("large category is null");
             return;
         }
-        SmallCategory sc = selectedSmallCategory.get();
+        SmallCategory sc = smallCategory.getSelected();
         if (lc.isSmallCategory() && sc == null) {
             LOGGER.debug("small category is null");
             return;
@@ -364,7 +347,7 @@ public class MainViewModel implements ViewModel {
         setDisabledDefault();
 
         LargeCategory lc = largeCategory.getSelected();
-        SmallCategory sc = selectedSmallCategory.get();
+        SmallCategory sc = smallCategory.getSelected();
         if (lc == null || (lc.isSmallCategory() && sc == null)) {
             return;
         }
