@@ -1,7 +1,7 @@
 package yukihane.dq10bzrjava;
 
 import yukihane.dq10bzrjava.main.MainView;
-import yukihane.dq10bzrjava.main.MainViewModel;
+import yukihane.dq10bzrjava.main.vm.MainViewModel;
 import de.saxsys.mvvmfx.FluentViewLoader;
 import javafx.application.Application;
 import javafx.scene.Parent;

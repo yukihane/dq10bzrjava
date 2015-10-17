@@ -1,4 +1,4 @@
-package yukihane.dq10bzrjava.main;
+package yukihane.dq10bzrjava.main.vm;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

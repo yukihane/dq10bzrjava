@@ -1,5 +1,6 @@
 package yukihane.dq10bzrjava.main;
 
+import yukihane.dq10bzrjava.main.vm.MainViewModel;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
