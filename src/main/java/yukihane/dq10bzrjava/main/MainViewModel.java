@@ -1,7 +1,6 @@
 package yukihane.dq10bzrjava.main;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import rx.Observable;
 import rx.Subscriber;
@@ -61,11 +60,23 @@ public class MainViewModel implements ViewModel {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MainViewModel.class);
 
+    private HappyService service;
+
     private final ReadOnlyStringWrapper characterName = new ReadOnlyStringWrapper("");
+
+    public ReadOnlyStringProperty characterNameProperty() {
+        return characterName;
+    }
+
+    public String getCharacterName() {
+        return characterName.get();
+    }
 
     private final Command loginCommand;
 
-    private HappyService service;
+    public Command getLoginCommand() {
+        return loginCommand;
+    }
 
     /**
      * 種類の選択肢.
@@ -73,11 +84,36 @@ public class MainViewModel implements ViewModel {
     private final ReadOnlyListWrapper<LargeCategory> largeCategories
         = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 
+    public ReadOnlyListProperty<LargeCategory> largeCategoriesProperty() {
+        return largeCategories.getReadOnlyProperty();
+    }
+
     /**
      * 選択された種類.
      */
     private final SimpleObjectProperty<LargeCategory> selectedLargeCategory
         = new SimpleObjectProperty<>();
+
+    public SimpleObjectProperty<LargeCategory> selectedLargeCategoryProperty() {
+        return selectedLargeCategory;
+    }
+
+    private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
+
+        @Override
+        public void changed(ObservableValue<? extends LargeCategory> observable, LargeCategory oldValue, LargeCategory newValue) {
+            if (oldValue == newValue) {
+                return;
+            }
+            smallCategories.clear();
+            itemCounts.clear();
+            if (!newValue.isSmallCategory()) {
+                queryItemCount();
+                return;
+            }
+            querySmallCategory();
+        }
+    }
 
     /**
      * 種類2の選択肢.
@@ -85,11 +121,32 @@ public class MainViewModel implements ViewModel {
     private final ReadOnlyListWrapper<SmallCategory> smallCategories
         = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 
+    public ReadOnlyListProperty<SmallCategory> smallCategoriesProperty() {
+        return smallCategories.getReadOnlyProperty();
+    }
+
     /**
      * 選択された種類2.
      */
     private final SimpleObjectProperty<SmallCategory> selectedSmallCategory
         = new SimpleObjectProperty<>();
+
+    public SimpleObjectProperty<SmallCategory> selectedSmallCategoryProperty() {
+        return selectedSmallCategory;
+    }
+
+    private class SelectedSmallCategoryChangeListener implements ChangeListener<SmallCategory> {
+
+        @Override
+        public void changed(ObservableValue<? extends SmallCategory> observable, SmallCategory oldValue, SmallCategory newValue) {
+            if (oldValue == newValue) {
+                return;
+            }
+            unsetDisabled();
+            itemCounts.clear();
+            queryItemCount();
+        }
+    }
 
     /**
      * アイテム名の選択肢.
@@ -97,11 +154,27 @@ public class MainViewModel implements ViewModel {
     private final ReadOnlyListWrapper<ItemCount> itemCounts
         = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
 
+    public ReadOnlyListProperty<ItemCount> itemCountsProperty() {
+        return itemCounts.getReadOnlyProperty();
+    }
+
     /**
      * 選択されたアイテム名.
      */
     private final SimpleObjectProperty<ItemCount> selectedItemCount
         = new SimpleObjectProperty<>();
+
+    public SimpleObjectProperty<ItemCount> selectedItemCountProperty() {
+        return selectedItemCount;
+    }
+
+    private class SelectedItemCountChangeListener implements ChangeListener<ItemCount> {
+
+        @Override
+        public void changed(ObservableValue<? extends ItemCount> observable, ItemCount oldValue, ItemCount newValue) {
+            System.out.println("item count changed");
+        }
+    }
 
     /**
      * アイテム名が選択不可能か.
@@ -109,11 +182,19 @@ public class MainViewModel implements ViewModel {
     private final ReadOnlyBooleanWrapper disabledItemCounts
         = new ReadOnlyBooleanWrapper(true);
 
+    public ReadOnlyBooleanProperty disabledItemCountsProperty() {
+        return disabledItemCounts.getReadOnlyProperty();
+    }
+
     /**
      * できのよさの選択肢.
      */
     private final ReadOnlyListWrapper<Quality> qualities
         = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
+
+    public ReadOnlyListProperty<Quality> qualitiesProperty() {
+        return qualities.getReadOnlyProperty();
+    }
 
     /**
      * 選択されたできのよさ.
@@ -121,11 +202,19 @@ public class MainViewModel implements ViewModel {
     private final SimpleObjectProperty<Quality> selectedQuality
         = new SimpleObjectProperty<>();
 
+    public SimpleObjectProperty<Quality> selectedQualityProperty() {
+        return selectedQuality;
+    }
+
     /**
      * できのよさが選択不可能か.
      */
     private final ReadOnlyBooleanWrapper disabledQualities
         = new ReadOnlyBooleanWrapper(true);
+
+    public ReadOnlyBooleanProperty disabledQualitiesProperty() {
+        return disabledQualities.getReadOnlyProperty();
+    }
 
     public MainViewModel() {
         ObjectMapper mapper = new ObjectMapper();
@@ -156,58 +245,6 @@ public class MainViewModel implements ViewModel {
             characterName.set(sess.getDisplayName());
             loadInitialData();
         }
-    }
-
-    public ReadOnlyStringProperty characterNameProperty() {
-        return characterName;
-    }
-
-    public String getCharacterName() {
-        return characterName.get();
-    }
-
-    public Command getLoginCommand() {
-        return loginCommand;
-    }
-
-    public ReadOnlyListProperty<LargeCategory> largeCategoriesProperty() {
-        return largeCategories.getReadOnlyProperty();
-    }
-
-    public SimpleObjectProperty<LargeCategory> selectedLargeCategoryProperty() {
-        return selectedLargeCategory;
-    }
-
-    public ReadOnlyListProperty<SmallCategory> smallCategoriesProperty() {
-        return smallCategories.getReadOnlyProperty();
-    }
-
-    public SimpleObjectProperty<SmallCategory> selectedSmallCategoryProperty() {
-        return selectedSmallCategory;
-    }
-
-    public ReadOnlyListProperty<ItemCount> itemCountsProperty() {
-        return itemCounts.getReadOnlyProperty();
-    }
-
-    public SimpleObjectProperty<ItemCount> selectedItemCountProperty() {
-        return selectedItemCount;
-    }
-
-    public ReadOnlyBooleanProperty disabledItemCountsProperty() {
-        return disabledItemCounts.getReadOnlyProperty();
-    }
-
-    public ReadOnlyListProperty<Quality> qualitiesProperty() {
-        return qualities.getReadOnlyProperty();
-    }
-
-    public SimpleObjectProperty<Quality> selectedQualityProperty() {
-        return selectedQuality;
-    }
-
-    public ReadOnlyBooleanProperty disabledQualitiesProperty() {
-        return disabledQualities.getReadOnlyProperty();
     }
 
     private void openLoginWindow() {
@@ -385,43 +422,5 @@ public class MainViewModel implements ViewModel {
     private void setDisabledDefault() {
         disabledItemCounts.set(true);
         disabledQualities.set(true);
-    }
-
-    private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
-
-        @Override
-        public void changed(ObservableValue<? extends LargeCategory> observable, LargeCategory oldValue, LargeCategory newValue) {
-            if (oldValue == newValue) {
-                return;
-            }
-            smallCategories.clear();
-            itemCounts.clear();
-            if (!newValue.isSmallCategory()) {
-                queryItemCount();
-                return;
-            }
-            querySmallCategory();
-        }
-    }
-
-    private class SelectedSmallCategoryChangeListener implements ChangeListener<SmallCategory> {
-
-        @Override
-        public void changed(ObservableValue<? extends SmallCategory> observable, SmallCategory oldValue, SmallCategory newValue) {
-            if (oldValue == newValue) {
-                return;
-            }
-            unsetDisabled();
-            itemCounts.clear();
-            queryItemCount();
-        }
-    }
-
-    private class SelectedItemCountChangeListener implements ChangeListener<ItemCount> {
-
-        @Override
-        public void changed(ObservableValue<? extends ItemCount> observable, ItemCount oldValue, ItemCount newValue) {
-            System.out.println("item count changed");
-        }
     }
 }
