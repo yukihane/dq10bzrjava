@@ -70,25 +70,8 @@ public class MainViewModel implements ViewModel {
     @Getter
     private final CharacterNameProperties characterName = new CharacterNameProperties();
 
-    /**
-     * 種類の選択肢.
-     */
-    private final ReadOnlyListWrapper<LargeCategory> largeCategories
-        = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
-
-    public ReadOnlyListProperty<LargeCategory> largeCategoriesProperty() {
-        return largeCategories.getReadOnlyProperty();
-    }
-
-    /**
-     * 選択された種類.
-     */
-    private final SimpleObjectProperty<LargeCategory> selectedLargeCategory
-        = new SimpleObjectProperty<>();
-
-    public SimpleObjectProperty<LargeCategory> selectedLargeCategoryProperty() {
-        return selectedLargeCategory;
-    }
+    @Getter
+    private final LargeCategoryProperties largeCategory = new LargeCategoryProperties();
 
     private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
 
@@ -226,7 +209,7 @@ public class MainViewModel implements ViewModel {
             }
         });
 
-        selectedLargeCategory.addListener(new SelectedLargeCategoryChangeListener());
+        largeCategory.selected.addListener(new SelectedLargeCategoryChangeListener());
         selectedSmallCategory.addListener(new SelectedSmallCategoryChangeListener());
         selectedItemCount.addListener(new SelectedItemCountChangeListener());
 
@@ -299,7 +282,7 @@ public class MainViewModel implements ViewModel {
         observable.subscribeOn(Schedulers.io());
         observable.observeOn(Schedulers.newThread()).subscribe((List<LargeCategory> data) -> {
             Platform.runLater(() -> {
-                largeCategories.addAll(data);
+                largeCategory.values.addAll(data);
             });
         }, (Throwable t) -> {
             LOGGER.error("large category get error", t);
@@ -307,7 +290,7 @@ public class MainViewModel implements ViewModel {
     }
 
     private void querySmallCategory() {
-        LargeCategory lc = selectedLargeCategory.get();
+        LargeCategory lc = largeCategory.getSelected();
         if (lc == null) {
             LOGGER.debug("large category is null");
             return;
@@ -338,7 +321,7 @@ public class MainViewModel implements ViewModel {
     }
 
     private void queryItemCount() {
-        LargeCategory lc = selectedLargeCategory.get();
+        LargeCategory lc = largeCategory.getSelected();
         if (lc == null) {
             LOGGER.debug("large category is null");
             return;
@@ -380,7 +363,7 @@ public class MainViewModel implements ViewModel {
         clearOptions();
         setDisabledDefault();
 
-        LargeCategory lc = selectedLargeCategory.get();
+        LargeCategory lc = largeCategory.getSelected();
         SmallCategory sc = selectedSmallCategory.get();
         if (lc == null || (lc.isSmallCategory() && sc == null)) {
             return;

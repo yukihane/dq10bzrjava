@@ -39,10 +39,10 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         characterLabel.textProperty().bind(viewModel.getCharacterName().valueProperty());
 
-        cbLargeCategory.itemsProperty().bind(viewModel.largeCategoriesProperty());
+        cbLargeCategory.itemsProperty().bind(viewModel.getLargeCategory().valuesProperty());
         cbLargeCategory.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue)
-            -> viewModel.selectedLargeCategoryProperty().set(newValue)
+            -> viewModel.getLargeCategory().selectedProperty().set(newValue)
         );
 //        cbLargeCategory.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 //
