@@ -37,7 +37,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        characterLabel.textProperty().bind(viewModel.characterNameProperty());
+        characterLabel.textProperty().bind(viewModel.getCharacterName().valueProperty());
 
         cbLargeCategory.itemsProperty().bind(viewModel.largeCategoriesProperty());
         cbLargeCategory.getSelectionModel().selectedItemProperty().addListener(

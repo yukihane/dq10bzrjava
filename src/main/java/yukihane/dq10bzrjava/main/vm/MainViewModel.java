@@ -23,8 +23,6 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
-import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -34,6 +32,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.schedulers.Schedulers;
@@ -62,21 +61,14 @@ public class MainViewModel implements ViewModel {
 
     private HappyService service;
 
-    private final ReadOnlyStringWrapper characterName = new ReadOnlyStringWrapper("");
-
-    public ReadOnlyStringProperty characterNameProperty() {
-        return characterName;
-    }
-
-    public String getCharacterName() {
-        return characterName.get();
-    }
-
     private final Command loginCommand;
 
     public Command getLoginCommand() {
         return loginCommand;
     }
+
+    @Getter
+    private final CharacterNameProperties characterName = new CharacterNameProperties();
 
     /**
      * 種類の選択肢.
@@ -242,7 +234,7 @@ public class MainViewModel implements ViewModel {
         String sessionId = sess.getSessionId();
         if (sessionId != null && !sessionId.isEmpty()) {
             service = HappyServiceFactory.getService(sess.getSessionId());
-            characterName.set(sess.getDisplayName());
+            characterName.value.set(sess.getDisplayName());
             loadInitialData();
         }
     }
@@ -265,7 +257,7 @@ public class MainViewModel implements ViewModel {
                 CharacterList character = (CharacterList) payload[2];
                 String displayName = character.getCharacterName()
                     + " (" + character.getSmileUniqueNo() + ")";
-                characterName.set(displayName);
+                characterName.value.set(displayName);
                 Session sess = Session.getInstance();
                 sess.setSessionId(sessionId);
                 sess.setDisplayName(displayName);
