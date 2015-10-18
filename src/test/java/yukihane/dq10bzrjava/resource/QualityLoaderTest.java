@@ -10,7 +10,8 @@ public class QualityLoaderTest {
     @Test
     public void testLoad() {
         final List<Quality> res = new QualityLoader().load();
-        assertNotEquals(0, res.size());
+        assertFalse(res.isEmpty());
+        assertTrue("type: " + res.get(0).getClass(), res.get(0) instanceof Quality);
     }
 
 }

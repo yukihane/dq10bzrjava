@@ -13,4 +13,9 @@ public class QualityLoader extends JsonFileLoader<Quality> {
         return "assets/qualitySet.json";
     }
 
+    @Override
+    protected Class<Quality> getType() {
+        return Quality.class;
+    }
+
 }

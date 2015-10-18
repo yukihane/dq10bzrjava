@@ -14,4 +14,9 @@ public class DifficultyLoader extends JsonFileLoader<Difficulty> {
         return "assets/difficultySet.json";
     }
 
+    @Override
+    protected Class<Difficulty> getType() {
+        return Difficulty.class;
+    }
+
 }
