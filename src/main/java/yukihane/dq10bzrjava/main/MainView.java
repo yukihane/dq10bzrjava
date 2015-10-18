@@ -60,7 +60,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             -> viewModel.getSmallCategory().selectedProperty().set(newValue)
         );
         final Callback<ListView<SmallCategory>, ListCell<SmallCategory>> scCellFactory
-            = (param) -> new SmallCategoryCell();
+            = (param) -> new EntityCell<>();
         cbSmallCategory.setButtonCell(scCellFactory.call(null));
         cbSmallCategory.setCellFactory(scCellFactory);
 

@@ -12,7 +12,7 @@ import yukihane.dq10remote.communication.dto.bazaar.SmallCategoryValueList;
  */
 @EqualsAndHashCode
 @ToString
-public class SmallCategory {
+public class SmallCategory implements Entity {
 
     @Getter
     private final String smallCategoryName;
@@ -27,6 +27,11 @@ public class SmallCategory {
 
     public static SmallCategory from(SmallCategoryValueList t) {
         return new SmallCategory(t.getSmallCategoryName(), t.getSmallCategoryId());
+    }
+
+    @Override
+    public String getDisplayText() {
+        return getSmallCategoryName();
     }
 
 }
