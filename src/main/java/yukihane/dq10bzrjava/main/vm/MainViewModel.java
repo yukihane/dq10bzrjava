@@ -30,8 +30,10 @@ import yukihane.dq10bzrjava.Constants;
 import yukihane.dq10bzrjava.Session;
 import yukihane.dq10bzrjava.entity.ItemCount;
 import yukihane.dq10bzrjava.entity.LargeCategory;
+import yukihane.dq10bzrjava.entity.Quality;
 import yukihane.dq10bzrjava.entity.SmallCategory;
 import yukihane.dq10bzrjava.login.LoginView;
+import yukihane.dq10bzrjava.resource.QualityLoader;
 import yukihane.dq10remote.communication.HappyService;
 import yukihane.dq10remote.communication.HappyServiceFactory;
 import yukihane.dq10remote.communication.dto.bazaar.ItemCountDto;
@@ -69,6 +71,8 @@ public class MainViewModel implements ViewModel {
 
     @Getter
     private final QualityProperties quality = new QualityProperties();
+
+    private final List<Quality> qualities = new QualityLoader().load();
 
     public MainViewModel() {
 
@@ -246,12 +250,12 @@ public class MainViewModel implements ViewModel {
             // 武器, 盾, 防具の場合
             itemCount.disabled.set(false);
             quality.disabled.set(false);
-//            qualities.addAll(Quality.values());
+            quality.values.addAll(qualities);
         } else if (lcid == 5 || lcid == 11 || scid == 606) {
             // 職人どうぐ, 釣りどうぐ, 消費アイテム>料理 の場合
             itemCount.disabled.set(false);
             quality.disabled.set(false);
-//            qualities.addAll(Quality.values());
+            quality.values.addAll(qualities);
         } else if (scid == 605) {
             // 消費アイテム>依頼書 の場合
 
