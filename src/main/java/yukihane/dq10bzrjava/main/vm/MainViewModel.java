@@ -79,6 +79,9 @@ public class MainViewModel implements ViewModel {
     @Getter
     private final ItemCountProperties itemCount = new ItemCountProperties();
 
+    @Getter
+    private final QualityProperties quality = new QualityProperties();
+
     private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
 
         @Override
@@ -115,36 +118,6 @@ public class MainViewModel implements ViewModel {
         public void changed(ObservableValue<? extends ItemCount> observable, ItemCount oldValue, ItemCount newValue) {
             System.out.println("item count changed");
         }
-    }
-
-    /**
-     * できのよさの選択肢.
-     */
-    private final ReadOnlyListWrapper<Quality> qualities
-        = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
-
-    public ReadOnlyListProperty<Quality> qualitiesProperty() {
-        return qualities.getReadOnlyProperty();
-    }
-
-    /**
-     * 選択されたできのよさ.
-     */
-    private final SimpleObjectProperty<Quality> selectedQuality
-        = new SimpleObjectProperty<>();
-
-    public SimpleObjectProperty<Quality> selectedQualityProperty() {
-        return selectedQuality;
-    }
-
-    /**
-     * できのよさが選択不可能か.
-     */
-    private final ReadOnlyBooleanWrapper disabledQualities
-        = new ReadOnlyBooleanWrapper(true);
-
-    public ReadOnlyBooleanProperty disabledQualitiesProperty() {
-        return disabledQualities.getReadOnlyProperty();
     }
 
     public MainViewModel() {
@@ -330,12 +303,12 @@ public class MainViewModel implements ViewModel {
         if (lcid == 1 || lcid == 2 || lcid == 3) {
             // 武器, 盾, 防具の場合
             itemCount.disabled.set(false);
-            disabledQualities.set(false);
+            quality.disabled.set(false);
 //            qualities.addAll(Quality.values());
         } else if (lcid == 5 || lcid == 11 || scid == 606) {
             // 職人どうぐ, 釣りどうぐ, 消費アイテム>料理 の場合
             itemCount.disabled.set(false);
-            disabledQualities.set(false);
+            quality.disabled.set(false);
 //            qualities.addAll(Quality.values());
         } else if (scid == 605) {
             // 消費アイテム>依頼書 の場合
@@ -347,11 +320,11 @@ public class MainViewModel implements ViewModel {
     }
 
     private void clearOptions() {
-        qualities.clear();
+        quality.values.clear();
     }
 
     private void setDisabledDefault() {
         itemCount.disabled.set(true);
-        disabledQualities.set(true);
+        quality.disabled.set(true);
     }
 }
