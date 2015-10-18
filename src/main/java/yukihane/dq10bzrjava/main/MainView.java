@@ -15,6 +15,7 @@ import javafx.scene.control.ListView;
 import javafx.util.Callback;
 import yukihane.dq10bzrjava.entity.ItemCount;
 import yukihane.dq10bzrjava.entity.LargeCategory;
+import yukihane.dq10bzrjava.entity.NumOfRenkin;
 import yukihane.dq10bzrjava.entity.Quality;
 import yukihane.dq10bzrjava.entity.SmallCategory;
 import yukihane.dq10bzrjava.view.cell.EntityCell;
@@ -38,6 +39,9 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
     @FXML
     private ComboBox<Quality> cbQuality;
+
+    @FXML
+    private ComboBox<NumOfRenkin> cbNumOfRenkin;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -79,6 +83,14 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             = (param) -> new EntityCell<>();
         cbQuality.setButtonCell(qtCellFactory.call(null));
         cbQuality.setCellFactory(qtCellFactory);
+
+        cbNumOfRenkin.itemsProperty().bind(viewModel.getNumOfRenkin().valuesProperty());
+        viewModel.getNumOfRenkin().selectedProperty().bind(cbNumOfRenkin.getSelectionModel().selectedItemProperty());
+        cbNumOfRenkin.disableProperty().bind(viewModel.getNumOfRenkin().disabledProperty());
+        final Callback<ListView<NumOfRenkin>, ListCell<NumOfRenkin>> norCellFactory
+            = (param) -> new EntityCell<>();
+        cbNumOfRenkin.setButtonCell(norCellFactory.call(null));
+        cbNumOfRenkin.setCellFactory(norCellFactory);
     }
 
     @FXML
