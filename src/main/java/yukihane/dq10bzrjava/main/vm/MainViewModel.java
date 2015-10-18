@@ -30,9 +30,11 @@ import yukihane.dq10bzrjava.Constants;
 import yukihane.dq10bzrjava.Session;
 import yukihane.dq10bzrjava.entity.ItemCount;
 import yukihane.dq10bzrjava.entity.LargeCategory;
+import yukihane.dq10bzrjava.entity.NumOfRenkin;
 import yukihane.dq10bzrjava.entity.Quality;
 import yukihane.dq10bzrjava.entity.SmallCategory;
 import yukihane.dq10bzrjava.login.LoginView;
+import yukihane.dq10bzrjava.resource.NumOfRenkinLoader;
 import yukihane.dq10bzrjava.resource.QualityLoader;
 import yukihane.dq10remote.communication.HappyService;
 import yukihane.dq10remote.communication.HappyServiceFactory;
@@ -73,6 +75,11 @@ public class MainViewModel implements ViewModel {
     private final QualityProperties quality = new QualityProperties();
 
     private final List<Quality> qualities = new QualityLoader().load();
+
+    @Getter
+    private final NumOfRenkinProperties numOfRenkin = new NumOfRenkinProperties();
+
+    private final List<NumOfRenkin> numOfRenkins = new NumOfRenkinLoader().load();
 
     public MainViewModel() {
 
@@ -250,7 +257,10 @@ public class MainViewModel implements ViewModel {
             // 武器, 盾, 防具の場合
             itemCount.disabled.set(false);
             quality.disabled.set(false);
+            numOfRenkin.disabled.set(false);
+
             quality.values.addAll(qualities);
+            numOfRenkin.values.addAll(numOfRenkins);
         } else if (lcid == 5 || lcid == 11 || scid == 606) {
             // 職人どうぐ, 釣りどうぐ, 消費アイテム>料理 の場合
             itemCount.disabled.set(false);
@@ -267,11 +277,13 @@ public class MainViewModel implements ViewModel {
 
     private void clearOptions() {
         quality.values.clear();
+        numOfRenkin.values.clear();
     }
 
     private void setDisabledDefault() {
         itemCount.disabled.set(true);
         quality.disabled.set(true);
+        numOfRenkin.disabled.set(true);
     }
 
     private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
