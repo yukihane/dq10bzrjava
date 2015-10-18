@@ -10,6 +10,9 @@ import javafx.scene.control.Label;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.util.Callback;
 import yukihane.dq10bzrjava.entity.ItemCount;
 import yukihane.dq10bzrjava.entity.LargeCategory;
 import yukihane.dq10bzrjava.entity.Quality;
@@ -44,18 +47,12 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             (observable, oldValue, newValue)
             -> viewModel.getLargeCategory().selectedProperty().set(newValue)
         );
-//        cbLargeCategory.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-//
-//            @Override
-//            public ListCell<String> call(ListView<String> param) {
-//                return new ListCell<String>() {
-//                    @Override
-//                    protected void updateItem(String item, boolean empty) {
-//                        super.updateItem(item, empty);
-//                    }
-//                };
-//            }
-//        });
+
+        // http://docs.oracle.com/javase/jp/8/javafx/api/javafx/scene/control/ComboBox.html
+        final Callback<ListView<LargeCategory>, ListCell<LargeCategory>> lcCellFactory
+            = (param) -> new LargeCategoryCell();
+        cbLargeCategory.setButtonCell(lcCellFactory.call(null));
+        cbLargeCategory.setCellFactory(lcCellFactory);
 
         cbSmallCategory.itemsProperty().bind(viewModel.getSmallCategory().valuesProperty());
         cbSmallCategory.getSelectionModel().selectedItemProperty().addListener(
