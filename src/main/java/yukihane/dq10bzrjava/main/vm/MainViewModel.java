@@ -76,6 +76,9 @@ public class MainViewModel implements ViewModel {
     @Getter
     private final SmallCategoryProperties smallCategory = new SmallCategoryProperties();
 
+    @Getter
+    private final ItemCountProperties itemCount = new ItemCountProperties();
+
     private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
 
         @Override
@@ -84,7 +87,7 @@ public class MainViewModel implements ViewModel {
                 return;
             }
             smallCategory.values.clear();
-            itemCounts.clear();
+            itemCount.values.clear();
             if (!newValue.isSmallCategory()) {
                 queryItemCount();
                 return;
@@ -101,29 +104,9 @@ public class MainViewModel implements ViewModel {
                 return;
             }
             unsetDisabled();
-            itemCounts.clear();
+            itemCount.values.clear();
             queryItemCount();
         }
-    }
-
-    /**
-     * アイテム名の選択肢.
-     */
-    private final ReadOnlyListWrapper<ItemCount> itemCounts
-        = new ReadOnlyListWrapper<>(FXCollections.observableArrayList());
-
-    public ReadOnlyListProperty<ItemCount> itemCountsProperty() {
-        return itemCounts.getReadOnlyProperty();
-    }
-
-    /**
-     * 選択されたアイテム名.
-     */
-    private final SimpleObjectProperty<ItemCount> selectedItemCount
-        = new SimpleObjectProperty<>();
-
-    public SimpleObjectProperty<ItemCount> selectedItemCountProperty() {
-        return selectedItemCount;
     }
 
     private class SelectedItemCountChangeListener implements ChangeListener<ItemCount> {
@@ -132,16 +115,6 @@ public class MainViewModel implements ViewModel {
         public void changed(ObservableValue<? extends ItemCount> observable, ItemCount oldValue, ItemCount newValue) {
             System.out.println("item count changed");
         }
-    }
-
-    /**
-     * アイテム名が選択不可能か.
-     */
-    private final ReadOnlyBooleanWrapper disabledItemCounts
-        = new ReadOnlyBooleanWrapper(true);
-
-    public ReadOnlyBooleanProperty disabledItemCountsProperty() {
-        return disabledItemCounts.getReadOnlyProperty();
     }
 
     /**
@@ -194,7 +167,7 @@ public class MainViewModel implements ViewModel {
 
         largeCategory.selected.addListener(new SelectedLargeCategoryChangeListener());
         smallCategory.selected.addListener(new SelectedSmallCategoryChangeListener());
-        selectedItemCount.addListener(new SelectedItemCountChangeListener());
+        itemCount.selected.addListener(new SelectedItemCountChangeListener());
 
         Session sess = Session.getInstance();
         String sessionId = sess.getSessionId();
@@ -335,7 +308,7 @@ public class MainViewModel implements ViewModel {
         observable.subscribeOn(Schedulers.io());
         observable.observeOn(Schedulers.newThread()).subscribe((List<ItemCount> data) -> {
             Platform.runLater(() -> {
-                itemCounts.addAll(data);
+                itemCount.values.addAll(data);
             });
         }, (Throwable t) -> {
             LOGGER.error("large category get error", t);
@@ -356,12 +329,12 @@ public class MainViewModel implements ViewModel {
 
         if (lcid == 1 || lcid == 2 || lcid == 3) {
             // 武器, 盾, 防具の場合
-            disabledItemCounts.set(false);
+            itemCount.disabled.set(false);
             disabledQualities.set(false);
 //            qualities.addAll(Quality.values());
         } else if (lcid == 5 || lcid == 11 || scid == 606) {
             // 職人どうぐ, 釣りどうぐ, 消費アイテム>料理 の場合
-            disabledItemCounts.set(false);
+            itemCount.disabled.set(false);
             disabledQualities.set(false);
 //            qualities.addAll(Quality.values());
         } else if (scid == 605) {
@@ -378,7 +351,7 @@ public class MainViewModel implements ViewModel {
     }
 
     private void setDisabledDefault() {
-        disabledItemCounts.set(true);
+        itemCount.disabled.set(true);
         disabledQualities.set(true);
     }
 }
