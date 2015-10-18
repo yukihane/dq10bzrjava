@@ -82,44 +82,6 @@ public class MainViewModel implements ViewModel {
     @Getter
     private final QualityProperties quality = new QualityProperties();
 
-    private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
-
-        @Override
-        public void changed(ObservableValue<? extends LargeCategory> observable, LargeCategory oldValue, LargeCategory newValue) {
-            if (oldValue == newValue) {
-                return;
-            }
-            smallCategory.values.clear();
-            itemCount.values.clear();
-            if (!newValue.isSmallCategory()) {
-                queryItemCount();
-                return;
-            }
-            querySmallCategory();
-        }
-    }
-
-    private class SelectedSmallCategoryChangeListener implements ChangeListener<SmallCategory> {
-
-        @Override
-        public void changed(ObservableValue<? extends SmallCategory> observable, SmallCategory oldValue, SmallCategory newValue) {
-            if (oldValue == newValue) {
-                return;
-            }
-            unsetDisabled();
-            itemCount.values.clear();
-            queryItemCount();
-        }
-    }
-
-    private class SelectedItemCountChangeListener implements ChangeListener<ItemCount> {
-
-        @Override
-        public void changed(ObservableValue<? extends ItemCount> observable, ItemCount oldValue, ItemCount newValue) {
-            System.out.println("item count changed");
-        }
-    }
-
     public MainViewModel() {
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -326,5 +288,43 @@ public class MainViewModel implements ViewModel {
     private void setDisabledDefault() {
         itemCount.disabled.set(true);
         quality.disabled.set(true);
+    }
+
+    private class SelectedLargeCategoryChangeListener implements ChangeListener<LargeCategory> {
+
+        @Override
+        public void changed(ObservableValue<? extends LargeCategory> observable, LargeCategory oldValue, LargeCategory newValue) {
+            if (oldValue == newValue) {
+                return;
+            }
+            smallCategory.values.clear();
+            itemCount.values.clear();
+            if (!newValue.isSmallCategory()) {
+                queryItemCount();
+                return;
+            }
+            querySmallCategory();
+        }
+    }
+
+    private class SelectedSmallCategoryChangeListener implements ChangeListener<SmallCategory> {
+
+        @Override
+        public void changed(ObservableValue<? extends SmallCategory> observable, SmallCategory oldValue, SmallCategory newValue) {
+            if (oldValue == newValue) {
+                return;
+            }
+            unsetDisabled();
+            itemCount.values.clear();
+            queryItemCount();
+        }
+    }
+
+    private class SelectedItemCountChangeListener implements ChangeListener<ItemCount> {
+
+        @Override
+        public void changed(ObservableValue<? extends ItemCount> observable, ItemCount oldValue, ItemCount newValue) {
+            System.out.println("item count changed");
+        }
     }
 }
