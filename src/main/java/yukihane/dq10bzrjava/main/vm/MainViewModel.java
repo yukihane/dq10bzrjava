@@ -282,12 +282,12 @@ public class MainViewModel implements ViewModel {
                 return;
             }
             smallCategory.values.clear();
-            itemCount.values.clear();
-            if (!newValue.isSmallCategory()) {
+            if (newValue.isSmallCategory()) {
+                querySmallCategory();
+            } else {
+                itemCount.values.clear();
                 queryItemCount();
-                return;
             }
-            querySmallCategory();
         }
     }
 
