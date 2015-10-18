@@ -1,7 +1,5 @@
 package yukihane.dq10bzrjava.main.vm;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import rx.Observable;
 import rx.Subscriber;
 import de.saxsys.mvvmfx.FluentViewLoader;
@@ -12,18 +10,10 @@ import de.saxsys.mvvmfx.utils.commands.Action;
 import de.saxsys.mvvmfx.utils.commands.Command;
 import de.saxsys.mvvmfx.utils.commands.DelegateCommand;
 import de.saxsys.mvvmfx.utils.notifications.NotificationObserver;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -38,10 +28,8 @@ import org.slf4j.LoggerFactory;
 import rx.schedulers.Schedulers;
 import yukihane.dq10bzrjava.Constants;
 import yukihane.dq10bzrjava.Session;
-import yukihane.dq10bzrjava.entity.Difficulty;
 import yukihane.dq10bzrjava.entity.ItemCount;
 import yukihane.dq10bzrjava.entity.LargeCategory;
-import yukihane.dq10bzrjava.entity.Quality;
 import yukihane.dq10bzrjava.entity.SmallCategory;
 import yukihane.dq10bzrjava.login.LoginView;
 import yukihane.dq10remote.communication.HappyService;
@@ -83,15 +71,7 @@ public class MainViewModel implements ViewModel {
     private final QualityProperties quality = new QualityProperties();
 
     public MainViewModel() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            URL difficultySetUrl = getClass().getClassLoader().getResource("assets/difficultySet.json");
-            List<Difficulty> difficultySet = mapper.readValue(difficultySetUrl, new TypeReference<List<Difficulty>>() {
-            });
-            System.out.println(difficultySet);
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(MainViewModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
         ObservableList<CharacterList> charalist = FXCollections.observableArrayList();
         loginCommand = new DelegateCommand(() -> new Action() {
             @Override
