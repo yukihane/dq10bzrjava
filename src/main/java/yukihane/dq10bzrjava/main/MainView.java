@@ -47,7 +47,6 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             (observable, oldValue, newValue)
             -> viewModel.getLargeCategory().selectedProperty().set(newValue)
         );
-
         // http://docs.oracle.com/javase/jp/8/javafx/api/javafx/scene/control/ComboBox.html
         final Callback<ListView<LargeCategory>, ListCell<LargeCategory>> lcCellFactory
             = (param) -> new LargeCategoryCell();
@@ -59,6 +58,10 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             (observable, oldValue, newValue)
             -> viewModel.getSmallCategory().selectedProperty().set(newValue)
         );
+        final Callback<ListView<SmallCategory>, ListCell<SmallCategory>> scCellFactory
+            = (param) -> new SmallCategoryCell();
+        cbSmallCategory.setButtonCell(scCellFactory.call(null));
+        cbSmallCategory.setCellFactory(scCellFactory);
 
         cbItemCount.itemsProperty().bind(viewModel.getItemCount().valuesProperty());
         viewModel.getItemCount().selectedProperty().bind(cbItemCount.getSelectionModel().selectedItemProperty());
