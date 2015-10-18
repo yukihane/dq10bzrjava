@@ -7,11 +7,12 @@ import yukihane.dq10remote.communication.dto.bazaar.ItemCountValueList;
 
 /**
  * アイテムの実体.
+ *
  * @author yuki
  */
 @ToString
 @EqualsAndHashCode
-public class ItemCount {
+public class ItemCount implements Entity {
 
     @Getter
     private final String itemName;
@@ -26,6 +27,11 @@ public class ItemCount {
 
     public static ItemCount from(ItemCountValueList t) {
         return new ItemCount(t.getItemName(), t.getWebItemId());
+    }
+
+    @Override
+    public String getDisplayText() {
+        return getItemName();
     }
 
 }

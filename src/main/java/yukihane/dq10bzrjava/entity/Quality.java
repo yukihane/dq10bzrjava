@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode
-public class Quality {
+public class Quality implements Entity {
 
     @Getter
     private String text;
@@ -21,4 +21,9 @@ public class Quality {
 
     @Getter
     private int max;
+
+    @Override
+    public String getDisplayText() {
+        return getText();
+    }
 }

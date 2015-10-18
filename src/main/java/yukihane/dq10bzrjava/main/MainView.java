@@ -67,10 +67,18 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
         cbItemCount.itemsProperty().bind(viewModel.getItemCount().valuesProperty());
         viewModel.getItemCount().selectedProperty().bind(cbItemCount.getSelectionModel().selectedItemProperty());
         cbItemCount.disableProperty().bind(viewModel.getItemCount().disabledProperty());
+        final Callback<ListView<ItemCount>, ListCell<ItemCount>> itemCellFactory
+            = (param) -> new EntityCell<>();
+        cbItemCount.setButtonCell(itemCellFactory.call(null));
+        cbItemCount.setCellFactory(itemCellFactory);
 
         cbQuality.itemsProperty().bind(viewModel.getQuality().valuesProperty());
         viewModel.getQuality().selectedProperty().bind(cbQuality.getSelectionModel().selectedItemProperty());
         cbQuality.disableProperty().bind(viewModel.getQuality().disabledProperty());
+        final Callback<ListView<Quality>, ListCell<Quality>> qtCellFactory
+            = (param) -> new EntityCell<>();
+        cbQuality.setButtonCell(qtCellFactory.call(null));
+        cbQuality.setCellFactory(qtCellFactory);
     }
 
     @FXML
