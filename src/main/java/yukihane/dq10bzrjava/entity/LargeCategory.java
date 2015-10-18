@@ -10,7 +10,7 @@ import yukihane.dq10remote.communication.dto.bazaar.LargeCategoryValueList;
  * @author yuki
  */
 @ToString
-public class LargeCategory {
+public class LargeCategory implements Entity {
 
     @Getter
     private final String largeCategoryName;
@@ -40,5 +40,10 @@ public class LargeCategory {
         this.largeCategoryId = largeCategoryId;
         this.isSmallCategory = isSmallCategory;
         this.smallCategoryId = smallCategoryId;
+    }
+
+    @Override
+    public String getDisplayText() {
+        return getLargeCategoryName();
     }
 }

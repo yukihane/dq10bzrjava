@@ -17,6 +17,7 @@ import yukihane.dq10bzrjava.entity.ItemCount;
 import yukihane.dq10bzrjava.entity.LargeCategory;
 import yukihane.dq10bzrjava.entity.Quality;
 import yukihane.dq10bzrjava.entity.SmallCategory;
+import yukihane.dq10bzrjava.view.cell.EntityCell;
 
 public class MainView implements FxmlView<MainViewModel>, Initializable {
 
@@ -49,7 +50,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
         );
         // http://docs.oracle.com/javase/jp/8/javafx/api/javafx/scene/control/ComboBox.html
         final Callback<ListView<LargeCategory>, ListCell<LargeCategory>> lcCellFactory
-            = (param) -> new LargeCategoryCell();
+            = (param) -> new EntityCell<>();
         cbLargeCategory.setButtonCell(lcCellFactory.call(null));
         cbLargeCategory.setCellFactory(lcCellFactory);
 
