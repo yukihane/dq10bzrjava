@@ -1,0 +1,6 @@
+== Usage
+
+[source]
+----
+mvn clean javafx:run
+----
